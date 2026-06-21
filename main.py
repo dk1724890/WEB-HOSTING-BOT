@@ -33,8 +33,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 TOKEN = "BOT_TOKE  ADD KARO"
-OWNER_ID = APNA CHAT ID DO
-PASSWORD = "Flex-Devloper TUMHARE PAPA HE"
+OWNER_ID = 754309254
+PASSWORD = "dk1724890"
 
 # Store running processes: {user_id: [process_info, ...]}
 running_scripts = {}
