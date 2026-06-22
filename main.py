@@ -1,25 +1,22 @@
 import os
 import logging
-import threading
 import subprocess
 import re
 import sys
 import asyncio
+import time
 from flask import Flask, request
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
 # --- Flask Web Server ---
 app = Flask(__name__)
-
-# Render apna port khud deta hai, warna 5000 use hoga
 PORT = int(os.environ.get('PORT', 5000))
 
 @app.route('/')
 def home():
     return "Bot is running 24/7 on Render!"
 
-# Ye route Telegram ka webhook hit karega
 @app.route('/webhook', methods=['POST'])
 def webhook():
     if request.method == 'POST':
@@ -34,10 +31,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# --- YAHAN APNA TOKEN AUR ID DALO ---
-TOKEN = "8901541112:AAERoiZbxU3kwNtnwR_wcRxXDfhEJYwQs-4" 
-OWNER_ID = 754309254 # Apni chat id yahan number me dalo
-PASSWORD = "dk1724890"
+# --- Environment Variables ya Direct Token ---
+TOKEN = os.environ.get("TOKEN", "BOT_TOKEN_ADD_KARO") 
+OWNER_ID = int(os.environ.get("OWNER_ID", "123456789"))
+PASSWORD = "Flex-Devloper TUMHARE PAPA HE"
 
 running_scripts = {}
 approved_users = {}
@@ -249,7 +246,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # --- Main Execution ---
 if __name__ == '__main__':
     if not TOKEN or TOKEN == "BOT_TOKEN_ADD_KARO":
-        print("Error: TOKEN not set!")
+        print("Error: TOKEN not set! Please add TOKEN in Render Environment Variables.")
     else:
         # Pehle Bot application banao
         bot_app = ApplicationBuilder().token(TOKEN).connect_timeout(60).read_timeout(60).write_timeout(60).build()
@@ -263,14 +260,20 @@ if __name__ == '__main__':
 
         # Webhook set karne ka function
         async def setup_webhook():
-            # RENDER ME JO URL BANEGA WO YAHAN AAYEGA (https://xyz.onrender.com)
+            print("Waiting 5 seconds for Render server to be fully ready...")
+            time.sleep(5) # Yeh delay zaroori hai
+            
             render_url = os.environ.get('RENDER_EXTERNAL_URL')
             if render_url:
                 webhook_url = f"{render_url}/webhook"
-                await bot_app.bot.set_webhook(webhook_url)
-                print(f"Webhook set to: {webhook_url}")
+                # Pehle purana webhook delete karo agar koi hai
+                await bot_app.bot.delete_webhook(drop_pending_updates=True)
+                print(f"Setting Webhook to: {webhook_url}")
+                # Naya webhook set karo
+                await bot_app.bot.set_webhook(url=webhook_url)
+                print("Webhook set successfully!")
             else:
-                print("Running locally, skipping webhook.")
+                print("RENDER_EXTERNAL_URL not found. Running locally.")
 
         # Webhook setup run karo
         loop = asyncio.new_event_loop()
