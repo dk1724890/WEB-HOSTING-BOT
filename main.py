@@ -35,9 +35,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # --- YAHAN APNA TOKEN AUR ID DALO ---
-TOKEN = "BOT_TOKEN_ADD_KARO" 
-OWNER_ID = 123456789 # Apni chat id yahan number me dalo
-PASSWORD = "Flex-Devloper TUMHARE PAPA HE"
+TOKEN = "8901541112:AAERoiZbxU3kwNtnwR_wcRxXDfhEJYwQs-4" 
+OWNER_ID = 754309254 # Apni chat id yahan number me dalo
+PASSWORD = "dk1724890"
 
 running_scripts = {}
 approved_users = {}
